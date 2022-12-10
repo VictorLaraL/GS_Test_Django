@@ -6,10 +6,10 @@ coreschema==0.0.4
 dj-database-url==0.5.0
 Django==4.1.4
 django-environ==0.7.0
+django-paranoid-model==1.0.7
 djangorestframework==3.14.0
 djangorestframework-simplejwt==4.8.0
-django-paranoid-model==1.0.7
-drf-yasg==1.20.0
+drf-yasg==1.21.4
 idna==3.4
 inflection==0.5.1
 itypes==1.2.0

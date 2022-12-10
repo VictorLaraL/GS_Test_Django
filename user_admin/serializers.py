@@ -18,14 +18,14 @@ class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
-        data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
+        data["refresh"] = str(refresh)
         data["id"] = self.user.id
-        data["last_name"] = self.user.last_name
         data["name"] = self.user.name
+        data["last_name"] = self.user.last_name
         data["email"] = self.user.email
         data["is_admin"] = self.user.is_admin
-
+        
         # Add permissions info
         data["permissions"] = self.get_permissions(self.user)
 
@@ -44,29 +44,22 @@ class UserSerializer(serializers.ModelSerializer):
             "postal_code",
             "rfc",
             "date",
-            "is_active",
             "is_admin",
         )
         extra_kwargs = {
-            "password": {"write_only": True},            
+            "password": {"write_only": True},
+            "date": {"read_only": True},             
             "id": {"read_only": True},
         }
-"""
+
     def validate(self, attrs):
         data = super().validate(attrs)
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
-        data["id"] = self.user.id
-        data["last_name"] = self.user.last_name
-        data["name"] = self.user.name
-        data["email"] = self.user.email
-        data["is_admin"] = self.user.is_admin
-
-        # Add permissions info
-        data["permissions"] = self.get_permissions(self.user.profile)
-
+        data["curp"] = str(refresh)
+        data["postal_code"] = str(refresh.access_token)
+        data["rfc"] = self.user.id
+        data["phone"] = self.user.last_name
+        
         return data
-"""
 class UserPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPermission

@@ -27,6 +27,7 @@ class UserManager(BaseUserManager, ParanoidManager):
 class User(AbstractUser, Paranoid):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=150, default="")
+    username = models.CharField(max_length=150, default="", null=True)
     last_name = models.CharField(max_length=150, default="")
     curp = models.CharField(max_length=50)
     postal_code = models.IntegerField(null=True)

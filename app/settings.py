@@ -18,7 +18,11 @@ SECRET_KEY = 'django-insecure-2zwvb6n=5)#n-!m40y1r)ljjzovpkbs=&z1dig#6a2zflio*)(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env("ALLOWED_HOSTS").replace("'", "").split(",")
+
+CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS").replace("'", "").split(",")
+
+CORS_ALLOW_ALL_ORIGINS = env("DEBUG")
 
 
 # Application definition
@@ -80,9 +84,13 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+   "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("DATABASE_NAME"),
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST"),
+        "PORT": env("DATABASE_PORT"),
     }
 }
 
