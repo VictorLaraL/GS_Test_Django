@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.base import Model
 from paranoid_model.models import Paranoid
 from paranoid_model.manager import ParanoidManager
+from phone_field import PhoneField
 
 class UserManager(BaseUserManager, ParanoidManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -33,6 +34,7 @@ class User(AbstractUser, Paranoid):
     postal_code = models.IntegerField(null=True)
     rfc = models.CharField(max_length=15)
     date = models.DateField(auto_now_add=True, blank=True)
+    phone = PhoneField(blank=True, help_text='Numero de telefono')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

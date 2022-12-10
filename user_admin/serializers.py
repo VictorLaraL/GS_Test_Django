@@ -2,6 +2,8 @@ from rest_framework import response, serializers
 from random import randrange
 from rest_framework.decorators import action, permission_classes
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from stdnum.mx import rfc, curp
+import re
 from .models import User, UserPermission
 
 class UserTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -43,6 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
             "curp",
             "postal_code",
             "rfc",
+            "phone",
             "date",
             "is_admin",
         )
@@ -52,14 +55,33 @@ class UserSerializer(serializers.ModelSerializer):
             "id": {"read_only": True},
         }
 
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        data["curp"] = str(refresh)
-        data["postal_code"] = str(refresh.access_token)
-        data["rfc"] = self.user.id
-        data["phone"] = self.user.last_name
+    def validate(self, data):
+        """
+            Validacion de los campos que son necesarios en el sistema.
+            Se podria generar un mensaje de acerdo al error si se quiere
+            ser mas explicito.
+        """
+        try:
+            rfc.validate(data["rfc"])
+        except (rfc.InvalidComponent, rfc.InvalidFormat, rfc.InvalidLength, rfc.InvalidChecksum):
+            raise serializers.ValidationError(
+                "EL rfc es incorrecto"
+                ) 
+        try:
+            curp.validate(data["curp"])
+        except (curp.InvalidComponent, curp.InvalidFormat, curp.InvalidLength, curp.InvalidChecksum):
+            raise serializers.ValidationError(
+                "EL curp es incorrecto"
+                ) 
         
+        if re.match(r"\d{5}", str(data["postal_code"])) == None:
+            raise serializers.ValidationError(
+                "EL codigo postal es incorrecto"
+                ) 
+
         return data
+
+
 class UserPermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPermission
