@@ -127,3 +127,27 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#Cache files
+*.pyc
+__pycache__/
+.vscode/
+.vs/
+.spyproject/
+.idea/
+env/
+*.pyproj
+.DS_Store
+*.pyproj.user
+*.sln
+
+#Media files
+media/**
+media_cdn/**
+
+#Environment files
+*.env
+.env*
+
+#other
+*.zip
